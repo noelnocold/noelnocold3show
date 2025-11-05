@@ -566,7 +566,7 @@ body.app-body,
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.761);
     z-index: 51;
     opacity: 0;
     transform: translateY(6px);
@@ -618,3 +618,107 @@ body.app-body,
     min-width: 160px;
 }
 .music-modal-btn:hover { filter: brightness(0.97); }
+
+/* --------------------------------------------------
+   RESPONSIVE: Global adjustments and breakpoints
+   - Keep these rules scoped and additive so they don't
+     unexpectedly override existing component behavior.
+-------------------------------------------------- */
+
+:root{
+    --breakpoint-lg: 1024px;
+    --breakpoint-md: 768px;
+    --breakpoint-sm: 520px;
+    --container-max: 1100px;
+}
+
+/* Container responsiveness: keep center and max width consistent */
+.center-container,
+.info-section,
+.form-card {
+    width: calc(100% - 2rem);
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Countdown should stay fixed and above other UI. Use a high z-index
+   to avoid stacking-context surprises; also keep a safe height for
+   mobile by using the variable set earlier. */
+
+/* Make sure body has padding for fixed bar (uses --countdown-height if present) */
+body.app-body, #main-content {
+    padding-top: var(--countdown-height, 84px);
+}
+
+/* Info cards layout: keep two-column-ish on large screens, stack on small */
+.info-card {
+    display: block;
+}
+.info-card .card-content {
+    display:flex;
+    gap:1rem;
+    align-items:center;
+}
+
+@media (max-width: var(--breakpoint-md)) {
+    /* Stack card content vertically on tablets and phones */
+    .info-card .card-content { flex-direction: column; align-items: stretch; }
+    .media-left .card-content, .media-right .card-content { flex-direction: column; }
+    .info-card .card-media, .info-card .card-text { width:100%; }
+    .info-card .card-media img { max-height: 260px; }
+}
+
+/* Scroll button: use inline-flex so images and text align correctly
+   and adapt sizing across breakpoints. Avoid using viewport units for
+   width to prevent oversized buttons on very large screens. */
+.scroll-button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.6rem;
+    min-width: 180px;
+    max-width: 420px;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+}
+.scroll-button img { width:36px; height:auto; display:block; }
+
+@media (max-width: var(--breakpoint-sm)){
+    .scroll-button { min-width: 140px; padding: 0.45rem 0.8rem; font-size: 0.95rem; }
+    .scroll-button img { width: 30px; }
+}
+
+/* Music Space (player) responsiveness: move slightly inward on small screens
+   and reduce min-width so it doesn't cover too much area. */
+.music-space { right: 0.75rem; bottom: 0.75rem; }
+.music-space .ms-inner { min-width: 180px; max-width: 380px; }
+
+@media (max-width: var(--breakpoint-sm)){
+    .music-space { right: 0.5rem; bottom: 0.5rem; }
+    .music-space .ms-inner { min-width: 160px; max-width: 320px; padding: 0.4rem; }
+    .music-space .ms-info { min-width: 110px; }
+}
+
+/* Notifications: narrower on small screens so they don't overflow */
+.notifications { max-width: 92%; width: 640px; }
+@media (max-width: 520px) { .notifications { max-width: 96%; } }
+
+/* Modal overlay: ensure it visually sits above page content while
+   keeping the modal card interactive. We raise z-index to reduce
+   stacking-context related issues. If you still see it under other
+   elements, ensure the modal is appended to document.body in JS. */
+.music-modal { pointer-events: auto; }
+
+/* Small typography scale adjustments for mobile */
+@media (max-width: 520px) {
+    .form-title { font-size: 1.5rem; }
+    .form-card { padding: 1rem; }
+    .countdown-time { font-size: 1rem; }
+}
+
+/* Utility: make images responsive by default (used across components) */
+img { max-width: 100%; height: auto; display: block; }
+
+/* End of responsive add-on */
