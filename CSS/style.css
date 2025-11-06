@@ -31,7 +31,7 @@ body {
 #splash-screen {
     position: fixed;
     inset: 0;
-    z-index: 50;
+    z-index: 100;
     background-color: #024033;
     /* Màu nền brand-dark-green */
     display: flex;
@@ -457,7 +457,7 @@ select.form-input {
     position: fixed;
     right: 1rem;
     bottom: 1rem;
-    z-index: 49;
+    z-index: 20;
     pointer-events: auto;
 }
 
@@ -465,14 +465,13 @@ select.form-input {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    background: rgba(12,12,12,0.65); /* darker glass */
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255,255,255,0.06);
     backdrop-filter: blur(10px) saturate(120%);
     color: #fff;
     padding: 0.5rem 0.6rem;
     border-radius: 14px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    min-width: 220px;
     max-width: 420px;
 }
 
@@ -497,10 +496,91 @@ select.form-input {
 .ms-progress-bar { width:0%; height:100%; background: linear-gradient(90deg, #facc15, #fb7185); transition: width .2s linear; }
 
 @media (max-width: 520px) {
-    .music-space .ms-inner { min-width: 180px; padding: 0.45rem; }
+    .music-space .ms-inner { padding: 0.45rem; }
     .music-space .ms-title { font-size: 0.9rem; }
 }
 
+/* Ensure music-space stays on top and expand/collapse works without removing the original UI */
+.music-space {
+    /* raise above countdown/notifications but below modal if needed */
+    z-index: 50;
+    transition: width .22s ease, height .22s ease, border-radius .22s ease, transform .18s ease, right .18s ease, bottom .18s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+/* Toggle (round icon) — visible when collapsed */
+.ms-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: var(--brand-light-gold);
+    color: var(--brand-dark-green);
+    border: none;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.32);
+    cursor: pointer;
+    font-size: 20px;
+    transition: transform .18s cubic-bezier(.2,.9,.2,1), opacity .18s ease;
+    padding: 0;
+}
+
+/* Collapsed container: show only toggle, keep ms-inner present but hidden by opacity/pointer-events */
+.music-space.collapsed {
+    width: 68px;
+    height: 56px;
+    padding: 4px;
+    border-radius: 999px;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Keep ms-inner in DOM but visually hidden when collapsed (no display:none) */
+.music-space.collapsed .ms-inner {
+    opacity: 0;
+    transform: scale(.98);
+    pointer-events: none;
+    width: 0;
+    min-width: 0;
+    transition: opacity .18s ease, transform .18s ease, width .18s ease;
+}
+
+/* When expanded, ensure original styles are restored exactly (do not override) */
+.music-space:not(.collapsed) {
+    padding: 0;
+    width: auto;
+    height: auto;
+    border-radius: 14px;
+}
+
+/* Explicitly restore original .ms-inner appearance when expanded */
+.music-space:not(.collapsed) .ms-inner {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    width: auto;
+    min-width: 220px; /* preserve original min-width */
+    transition: opacity .18s ease, transform .18s ease, width .18s ease;
+}
+
+/* Toggle visibility rules */
+.music-space.collapsed .ms-toggle { opacity: 1; pointer-events: auto; }
+.music-space:not(.collapsed) .ms-toggle { opacity: 0; transform: scale(.92); pointer-events: none; }
+
+/* Accessibility: use aria-hidden attr on ms-inner — keep CSS consistent */
+.music-space .ms-inner[aria-hidden="true"] { opacity: 0; pointer-events: none; transform: scale(.98); }
+.music-space .ms-inner[aria-hidden="false"] { opacity: 1; pointer-events: auto; transform: none; }
+
+/* Keep small-screen sizing consistent */
+@media (max-width: 520px) {
+    .ms-toggle { width: 44px; height: 44px; }
+    .music-space.collapsed { width: 48px; height: 48px; }
+    .music-space .ms-inner {  max-width: 320px; padding: 0.4rem; }
+}
 
 /* Background color helpers used by JS */
 .bg-red {
@@ -693,11 +773,11 @@ body.app-body, #main-content {
 /* Music Space (player) responsiveness: move slightly inward on small screens
    and reduce min-width so it doesn't cover too much area. */
 .music-space { right: 0.75rem; bottom: 0.75rem; }
-.music-space .ms-inner { min-width: 180px; max-width: 380px; }
+.music-space .ms-inner {  max-width: 380px; }
 
 @media (max-width: var(--breakpoint-sm)){
     .music-space { right: 0.5rem; bottom: 0.5rem; }
-    .music-space .ms-inner { min-width: 160px; max-width: 320px; padding: 0.4rem; }
+    .music-space .ms-inner { max-width: 320px; padding: 0.4rem; }
     .music-space .ms-info { min-width: 110px; }
 }
 
@@ -722,3 +802,69 @@ body.app-body, #main-content {
 img { max-width: 100%; height: auto; display: block; }
 
 /* End of responsive add-on */
+/* =========================
+   CONTACT FIELDS (phone/email)
+   ========================= */
+
+.contact-field .field-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #f3f3f3;
+    margin-bottom: 0.28rem;
+    font-weight: 600;
+}
+
+/* row: value + copy button — use same tone as scroll-button */
+.contact-field .field-row, .card-text-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--brand-light-gold, #D6AD53);
+    color: var(--brand-dark-green, #073b2f);
+    padding: 0.6rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.contact-field .field-value {
+    flex: 1 1 auto;
+    font-weight: 700;
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+/* copy button */
+.contact-field .copy-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 36px;
+    padding: 0;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--brand-dark-green, #073b2f);
+    cursor: pointer;
+    transition: background .12s ease, transform .12s ease;
+    box-sizing: border-box;
+}
+.contact-field .copy-btn:hover,
+.contact-field .copy-btn:focus {
+    background: rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+}
+.contact-field .copy-btn .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 600;
+    font-size: 18px;
+    line-height: 1;
+}
+
+/* responsive */
+@media (max-width:520px) {
+    .contact-field .field-row { padding: 0.5rem; border-radius: 10px; }
+    .contact-field .copy-btn { width: 36px; height: 32px; }
+}

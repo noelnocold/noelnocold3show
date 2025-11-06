@@ -292,7 +292,7 @@ function showMessage(message, type = 'info', timeout = 3500) {
 
         // Status message logic
         if (days >= 7) {
-            countdownStatusEl.textContent = 'Sắp diễn ra';
+            countdownStatusEl.textContent = 'Diễn ra sau';
         } else if (days >= 1) {
             countdownStatusEl.textContent = `Còn ${days} ngày`;
         } else {
@@ -327,6 +327,59 @@ function showMessage(message, type = 'info', timeout = 3500) {
     const titleEl = container.querySelector('.ms-title');
     const statusEl = container.querySelector('.ms-status');
     const progressBar = container.querySelector('.ms-progress-bar');
+
+    // toggle / collapse controls
+    const msToggle = container.querySelector('.ms-toggle');
+    const msInner = container.querySelector('.ms-inner');
+    let collapseTimer = null;
+
+    function setExpanded(expanded) {
+        if (expanded) {
+            container.classList.remove('collapsed');
+            if (msInner) msInner.setAttribute('aria-hidden', 'false');
+            // start auto-collapse timer after 1s of inactivity
+            resetCollapseTimer();
+        } else {
+            container.classList.add('collapsed');
+            if (msInner) msInner.setAttribute('aria-hidden', 'true');
+            clearCollapseTimer();
+        }
+    }
+
+    function clearCollapseTimer() {
+        if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
+    }
+    function resetCollapseTimer() {
+        clearCollapseTimer();
+        collapseTimer = setTimeout(() => {
+            setExpanded(false);
+        }, 3000);
+    }
+
+    // ensure initial collapsed state (so user clicks toggle to open)
+    setExpanded(true); // briefly expanded so UI visible on init
+    // then collapse after short delay so user sees it initially (optional)
+    resetCollapseTimer();
+
+    if (msToggle) {
+        msToggle.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const isCollapsed = container.classList.contains('collapsed');
+            setExpanded(isCollapsed); // toggle: if collapsed -> expand, else collapse
+        }, { passive: true });
+    }
+
+    // Keep expanded while user interacts; collapse 1s after last interaction
+    const interactionEvents = ['mouseenter', 'mouseleave', 'touchstart', 'click', 'focusin', 'focusout'];
+    interactionEvents.forEach(evt => {
+        container.addEventListener(evt, (e) => {
+            if (evt === 'mouseenter' || evt === 'touchstart' || evt === 'focusin' || evt === 'click') {
+                clearCollapseTimer();
+            } else if (evt === 'mouseleave' || evt === 'focusout') {
+                resetCollapseTimer();
+            }
+        }, { passive: true });
+    });
 
     let playlist = [];
     let current = 0;
@@ -440,3 +493,48 @@ function showMessage(message, type = 'info', timeout = 3500) {
 
     // (No global exposure) keep scope internal to avoid unintended external control
 })();
+
+// Copy-to-clipboard: bắt sự kiện cho nút .copy-btn (và span bên trong)
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest && e.target.closest('.copy-btn');
+    if (!btn) return;
+
+    const row = btn.closest('.field-row');
+    const valEl = row ? row.querySelector('.field-value') : null;
+    const toCopy = valEl ? (valEl.getAttribute('data-copy') || valEl.textContent.trim()) : null;
+    if (!toCopy) return;
+
+    // Try modern clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(toCopy).then(() => {
+            try { showMessage && showMessage('Đã sao chép: ' + toCopy, 'success', 1500); } catch (err) {}
+            // small feedback animation
+            try { btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) {}
+        }).catch(() => fallbackCopy(toCopy, btn));
+    } else {
+        fallbackCopy(toCopy, btn);
+    }
+
+    function fallbackCopy(text, feedbackEl) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'absolute';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+            const ok = document.execCommand('copy');
+            if (ok) {
+                try { showMessage && showMessage('Đã sao chép: ' + text, 'success', 1500); } catch (err) {}
+                try { feedbackEl.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) {}
+            } else {
+                try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (err) {}
+            }
+        } catch (err) {
+            try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (e) {}
+        } finally {
+            ta.remove();
+        }
+    }
+}, { passive: true });
