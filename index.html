@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noel No Cool Show Season 3</title>
+    <title>Noel No Cold Show Season 3</title>
     <link rel="stylesheet" href="./CSS/color.css">
     <!-- Google Material Symbols (outlined) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -21,8 +21,8 @@
     <div id="music-modal-root"></div>
 
     <!-- COUNTDOWN BAR -->
-    <div id="countdown-bar" class="countdown-bar">
-        <div class="countdown-status" id="countdown-status">Sự kiện: Noel No Cool Show</div>
+    <div id="countdown-bar" class="countdown-bar" >
+        <div class="countdown-status" id="countdown-status">Sự kiện: Noel No Cold Show</div>
         <div class="countdown-time" id="countdown-time">-- ngày --:--:--</div>
         <div class="countdown-thumb">
             <!-- inline SVG placeholder -->
@@ -34,7 +34,7 @@
     <div style="text-align:center; margin-top:0.5rem; z-index:25; position:relative;">
         <button id="scroll-to-form" class="scroll-button">
             <img src="./DATA/IMG/christ_tree.gif" alt="Christmas Tree">
-            Đăng ký ngay
+            <h3>ĐĂNG KÝ NGAY</h3>
             <img src="./DATA/IMG/christ_tree.gif" alt="Christmas Tree">
         </button>
     </div>
@@ -42,10 +42,10 @@
     <!-- INFO SECTION: chương trình Noel (glass cards) -->
     <section class="info-section" id="info-section">
         <!-- 1: text only -->
-        <article class="info-card">
+        <article class="info-card" style="background-image: linear-gradient(#0240334a, #024033), url(../DATA/IMG/snow.gif); background-position: center; background-size: auto; background-size: 250px;">
             <div class="card-content">
                 <div class="card-text">
-                    <h3>Giới thiệu chương trình</h3>
+                    <h3>GIỚI THIỆU VỀ CHƯƠNG TRÌNH</h3>
                     <p>
                         Noel no Cold là chương trình do ban văn nghệ câu lạc bộ Du Lịch Sinh Thái tổ chức 2 năm 1 lần
                         nhân dịp lễ giáng sinh.
@@ -58,18 +58,18 @@
         <article class="info-card media-right">
             <div class="card-content">
                 <div class="card-text">
-                    <h3>Hoạt động chính</h3>
+                    <h3>HOẠT ĐỘNG CHÍNH</h3>
                     <div class="card-content">
-                        <div class="card-text-inner" style="flex:1; height:120px">
-                            <p>Chương trình với hoạt động chính là văn nghệ và giao lưu nhằm kết nối các thành viên
-                                trong và
-                                ngoài câu lạc bộ bằng một không gian ấm áp giữa cái lạnh của mùa đông.</p>
+                        <div class="card-text-inner" style="flex:1; height:180px">
+                            <p>
+                                Chương trình với hoạt động chính là văn nghệ, giao lưu nhằm kết nối các thành viên trong và ngoài câu lạc bộ bằng một không gian ấm áp giữa cái lạnh của mùa đông.
+                            </p>
                         </div>
-                        <div class="card-text-inner" style="flex:1; height:120px">
+                        <div class="card-text-inner" style="flex:1; height:180px">
                             <!-- <img class="card-media-abs" src="./DATA/IMG/merry_load.gif" alt="activity"> -->
-                            <p>Ngoài ra, sẽ rất quý giá nếu bạn cùng tham gia đóng góp với chương trình một phần quà
-                                tinh thần thể hiện qua bất kì tài năng văn nghệ nào của bạn nhé. Đăng kí qua hotline để
-                                chúng mình hỗ trợ bạn nha</p>
+                            <p>
+                                Ngoài ra, sẽ rất quý giá nếu bạn cùng tham gia đóng góp với chương trình một phần quà tinh thần thể hiện qua bất kì tài năng văn nghệ nào của bạn.<span class="highlight-box">Đăng ký qua hotline để chúng mình hỗ trợ bạn nhé!</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -113,24 +113,25 @@
         <article class="info-card media-left">
             <div class="card-content">
                 <div class="card-text">
-                    <h3>Hỗ trợ & liên hệ</h3>
+                    <h3>HỖ TRỢ & LIÊN HỆ</h3>
                     <p>Liên hệ ban tổ chức qua hotline hoặc email để biết thêm thông tin và hỗ trợ đăng ký.</p>
                 </div>
-                <div class="card-text">
+                <div class="card-text" style="display: flex;gap: 1rem;flex-direction: column;">
                     <div class="contact-field">
-                        <label class="field-label">Số điện thoại</label>
-                        <div class="field-row">
-                            <span class="field-value" data-copy="0901234567">0901234567</span>
+                        <!-- <label class="field-label">Số điện thoại</label> -->
+                        <div class="field-row" style="background-color: var(--brand-dark-green);">
+                            <span class="material-symbols-outlined" style="color: var(--brand-light-gold)">phone_forwarded</span>
+                            <span class="field-value" data-copy="0901234567" style="color: var(--brand-light-gold)">0901234567</span>
                             <button class="copy-btn" type="button" aria-label="Sao chép số điện thoại">
                                 <span class="material-symbols-outlined">content_copy</span>
                             </button>
                         </div>
                     </div>
 
-                    <div class="contact-field">
-                        <label class="field-label">Email</label>
-                        <div class="field-row">
-                            <span class="field-value" data-copy="support@example.com">support@example.com</span>
+                    <div class="contact-field" >
+                        <div class="field-row" style="background-color: var(--brand-dark-green);">
+                            <span class="material-symbols-outlined" style="color: var(--brand-light-gold)">mail</span>
+                            <span class="field-value" data-copy="support@example.com" style="color: var(--brand-light-gold)">support@example.com</span>
                             <button class="copy-btn" type="button" aria-label="Sao chép email">
                                 <span class="material-symbols-outlined">content_copy</span>
                             </button>
@@ -143,14 +144,15 @@
         <article class="info-card">
             <div class="card-content">
                 <div class="card-text">
-                    <h3>Ghi chú</h3>
-                    <p>✅Hãy đảm bảo bạn chắc chắn đến tham gia khi đăng kí nhé!<br>
-                        🎁Chương trình sẽ có những giới hạn về phần quà dành cho người tham gia. <br>
-                        🖌️Đăng kí ngay để không bỏ lỡ phần quà của bạn!<br>
+                    <h3>CHÚ Ý NHỎ XINH</h3>
+                    <p>
+                        <span class="material-symbols-outlined" style="color: var(--brand-light-gold)">check_circle</span>   Hãy đảm bảo bạn chắc chắn đến tham gia khi đăng ký nhé!<br>
+                        <span class="material-symbols-outlined" style="color: var(--brand-light-gold)">redeem</span>   Chương trình sẽ có những giới hạn về phần quà dành cho người tham gia. <br>
+                        <span class="material-symbols-outlined" style="color: var(--brand-light-gold)">checkbook</span>   Đăng kí ngay để không bỏ lỡ phần quà của bạn!<br>
                     </p>
                 </div>
                 <div class="card-media">
-                    <img src="./DATA/IMG/dress_code.png" alt="dress_code">
+                    <img src="./DATA/IMG/dress_code.webp" alt="dress_code">
                 </div>
             </div>
         </article>
@@ -165,7 +167,7 @@
             <!-- Vòng xoay -->
             <div id="splash-spinner"></div>
             <!-- Thay thế "LOGO" bằng thẻ <img> của bạn nếu muốn -->
-            <div id="splash-logo-inner"><img src="./DATA/IMG/logo.png" alt="Logo" style="width: 80px; height: auto;">
+            <div id="splash-logo-inner"><img src="./DATA/IMG/logo.webp" alt="Logo" style="width: 200px; height: auto;">
             </div>
         </div>
     </div>
@@ -177,7 +179,7 @@
         <div class="form-bg-layer" aria-hidden="true">
             <div class="form-bg-solid"></div>
             <div class="form-bg-image-wrap">
-                <img src="./DATA/IMG/background.png" alt="Background" class="form-bg-image">
+                <img src="./DATA/IMG/background.webp" alt="Background" class="form-bg-image">
             </div>
             <div class="form-bg-gradient"></div>
         </div>
@@ -191,7 +193,7 @@
             <form id="contact-form" class="form-card">
 
                 <h2 class="form-title">
-                    Thông Tin Đăng Ký
+                    THÔNG TIN ĐĂNG KÝ
                 </h2>
 
                 <!-- Trường: Tên -->
@@ -279,7 +281,7 @@
     </div>
     <footer class="site-footer" role="contentinfo">
         <div class="site-footer-inner">
-            <small>© <span id="current-year">2025</span> Noel No Cool — created by <span
+            <small>© <span id="current-year">2025</span> Noel No Cold — created by <span
                     class="author">DOVANQUOC</span></small>
         </div>
     </footer>

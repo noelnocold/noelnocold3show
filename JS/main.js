@@ -150,10 +150,10 @@ function validateForm() {
         return false;
     }
 
-    if (!Email || !/^[\w.%+-]+@gmail\.com$/i.test(Email.value.trim())) {
+    if (!Email || !/^[\w.%+-]+@(gmail\.com|st\.hcmuaf\.edu\.vn)$/i.test(Email.value.trim())) {
         Email.classList.add('invalid');
         Email.focus();
-        showMessage('Vui lòng nhập email Gmail hợp lệ', 'error');
+        showMessage('Vui lòng nhập email hợp lệ (ví dụ: yourname@gmail.com hoặc 20166016@st.hcmuaf.edu.vn)', 'error');
         return false;
     }
 
@@ -187,7 +187,7 @@ form.addEventListener('submit', function (e) {
         .then(data => {
             if (data.result === 'success') {
                 // Gửi thành công
-                showMessage('Gửi thông tin thành công!', 'success');
+                showMessage('Xin cảm ơn vì đã đăng kí tham gia!', 'success');
                 form.reset(); // Xóa rỗng form
                 // reset option buttons active states
                 document.querySelectorAll('.option-button.active').forEach(b => b.classList.remove('active'));
