@@ -83,7 +83,7 @@ window.addEventListener('load', () => {
 // --- PHẦN JAVASCRIPT ĐỂ GỬI DATA VỀ GOOGLE SHEET ---
 
 // BƯỚC 6: Dán URL Web App của bạn vào đây
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfH61O-62OZnn5A2M_R14HLQsYlHDWC_21KrR38ZNIN0q1ou49G16SURNNsB_BIqvf/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmwWQQd1YjBSI9h9Nf7lR2SbLCBYSq8KXnZe5Fsxn2yJzp-q9KO5H-3opD76AXj_Ix/exec';
 
 const form = document.getElementById('contact-form');
 const submitButton = document.getElementById('submit-button');
