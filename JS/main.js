@@ -267,7 +267,7 @@ function showMessage(message, type = 'info', timeout = 3500) {
 /* COUNTDOWN LOGIC */
 (() => {
     // Adjust target date/time here (YYYY, M-1, D, H, M, S)
-    const TARGET = new Date(2025, 11, 24, 20, 0, 0); // Dec 24, 2025 20:00:00 (example)
+    const TARGET = new Date(2025, 11, 21, 18, 0, 0); // Dec 24, 2025 20:00:00 (example)
     const countdownTimeEl = document.getElementById('countdown-time');
     const countdownStatusEl = document.getElementById('countdown-status');
 
