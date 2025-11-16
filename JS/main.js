@@ -187,7 +187,7 @@ form.addEventListener('submit', function (e) {
         .then(data => {
             if (data.result === 'success') {
                 // Gửi thành công
-                showMessage('Xin cảm ơn vì đã đăng kí tham gia! Email xác nhận sẽ được gữi đến bạn trong thời gian sớm nhất !', 'success');
+                showMessage('Xin cảm ơn! Email xác nhận sẽ được gửi đến bạn trong thời gian sớm nhất !', 'success');
                 form.reset(); // Xóa rỗng form
                 // reset option buttons active states
                 document.querySelectorAll('.option-button.active').forEach(b => b.classList.remove('active'));
