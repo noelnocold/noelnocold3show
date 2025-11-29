@@ -32,7 +32,7 @@ window.addEventListener('load', () => {
 
                 // Small pop-up attached to the Music Space informing about the new audio space
                 try {
-                    const mount = document.body; 
+                    const mount = document.body;
                     const existing = document.querySelector('.music-modal-overlay');
                     if (!existing) {
                         const overlay = document.createElement('div');
@@ -82,7 +82,7 @@ window.addEventListener('load', () => {
 
 // --- PHẦN JAVASCRIPT ĐỂ GỬI DATA VỀ GOOGLE SHEET ---
 
-// BƯỚC 6: Dán URL Web App của bạn vào đây
+// BƯỚC 6:
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmwWQQd1YjBSI9h9Nf7lR2SbLCBYSq8KXnZe5Fsxn2yJzp-q9KO5H-3opD76AXj_Ix/exec';
 
 const form = document.getElementById('contact-form');
@@ -172,41 +172,79 @@ form.addEventListener('submit', function (e) {
 
     if (!validateForm()) return;
 
-    // Vô hiệu hóa nút và hiển thị trạng thái đang gửi
+    // Vô hiệu hóa nút và hiển thị trạng thái đang gửi (kèm gif)
     submitButton.disabled = true;
-    submitButton.textContent = 'Đang gửi...';
+
+    // Thay nội dung nút bằng gif + label (gif nằm trái, cao = chiều rộng hiện tại của button)
+    submitButton.innerHTML = ''; // clear
+    const gif = document.createElement('img');
+    gif.src = './DATA/IMG/loading.gif';
+    gif.alt = 'loading';
+    gif.style.display = 'inline-block';
+    gif.style.width = 'auto';
+    gif.style.marginRight = '0.6rem';
+    gif.style.objectFit = 'cover';
+    // set height equal to current button width (fill theo yêu cầu)
+    const setGifHeight = () => {
+        const w = submitButton.clientWidth || submitButton.offsetWidth || 120;
+        gif.style.height = w + 'px';
+        gif.style.maxHeight = '100%';
+    };
+    setGifHeight();
+    const onResize = () => setGifHeight();
+    window.addEventListener('resize', onResize);
+
+    const label = document.createElement('span');
+    label.textContent = 'Đang gửi_';
+
+    submitButton.appendChild(label);
+    submitButton.appendChild(gif);
 
     const formData = new FormData(form);
 
-    // Gửi dữ liệu đến Google Apps Script
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.result === 'success') {
-                // Gửi thành công
+    // GỬI DỮ LIỆU VỚI CƠ CHẾ RETRY: đợi 2s và thử lại tối đa 3 lần (nếu còn lỗi mới báo)
+    const RETRY_COUNT = 3;
+    const RETRY_DELAY = 2000;
+
+    // cleanup chung (restore nút, remove resize handler)
+    function cleanupAfterSend() {
+        try { window.removeEventListener('resize', onResize); } catch (e) { }
+        submitButton.disabled = false;
+        submitButton.textContent = 'Gửi Thông Tin';
+    }
+
+    (function sendWithRetry(remaining) {
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: formData
+        })
+            .then(async response => {
+                // cố gắng parse JSON; nếu không parse được sẽ ném vào catch
+                const data = await response.json().catch(() => { throw new Error('Invalid JSON response'); });
+                if (data && data.result === 'success') return data;
+                throw new Error(data && data.error ? data.error : 'Server returned error');
+            })
+            .then(data => {
+                // success
                 showMessage('Xin cảm ơn! Email xác nhận sẽ được gửi đến bạn trong thời gian sớm nhất !', 'success');
-                form.reset(); // Xóa rỗng form
-                // reset option buttons active states
+                form.reset();
                 document.querySelectorAll('.option-button.active').forEach(b => b.classList.remove('active'));
-            } else {
-                // Có lỗi xảy ra
-                console.error('Error from Apps Script:', data.error);
-                showMessage('Gửi thất bại. Vui lòng thử lại.', 'error');
-            }
-        })
-        .catch(error => {
-            // Lỗi mạng hoặc fetch
-            console.error('Fetch Error:', error);
-            showMessage('Lỗi kết nối. Vui lòng thử lại.', 'error');
-        })
-        .finally(() => {
-            // Kích hoạt lại nút
-            submitButton.disabled = false;
-            submitButton.textContent = 'Gửi Thông Tin';
-        });
+                cleanupAfterSend();
+            })
+            .catch(err => {
+                if (remaining > 0) {
+                    // chờ 2s rồi thử lại
+                    console.warn(`Send failed, retrying in ${RETRY_DELAY}ms... (${remaining} retries left)`, err);
+                    setTimeout(() => sendWithRetry(remaining - 1), RETRY_DELAY);
+                    return;
+                }
+                // đã hết lượt retry -> báo lỗi
+                console.error('Final send error:', err);
+                showMessage('Gửi thất bại sau nhiều lần thử. Vui lòng thử lại sau.', 'error');
+                cleanupAfterSend();
+            });
+    })(RETRY_COUNT);
+
 });
 
 // Hàm hiển thị thông báo kiểu stacked glass (top-down)
@@ -507,9 +545,9 @@ document.addEventListener('click', function (e) {
     // Try modern clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(toCopy).then(() => {
-            try { showMessage && showMessage('Đã sao chép: ' + toCopy, 'success', 1500); } catch (err) {}
+            try { showMessage && showMessage('Đã sao chép: ' + toCopy, 'success', 1500); } catch (err) { }
             // small feedback animation
-            try { btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) {}
+            try { btn.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) { }
         }).catch(() => fallbackCopy(toCopy, btn));
     } else {
         fallbackCopy(toCopy, btn);
@@ -526,13 +564,13 @@ document.addEventListener('click', function (e) {
         try {
             const ok = document.execCommand('copy');
             if (ok) {
-                try { showMessage && showMessage('Đã sao chép: ' + text, 'success', 1500); } catch (err) {}
-                try { feedbackEl.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) {}
+                try { showMessage && showMessage('Đã sao chép: ' + text, 'success', 1500); } catch (err) { }
+                try { feedbackEl.animate([{ transform: 'scale(1)' }, { transform: 'scale(.94)' }, { transform: 'scale(1)' }], { duration: 180 }); } catch (err) { }
             } else {
-                try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (err) {}
+                try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (err) { }
             }
         } catch (err) {
-            try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (e) {}
+            try { showMessage && showMessage('Không thể sao chép', 'error', 1500); } catch (e) { }
         } finally {
             ta.remove();
         }
