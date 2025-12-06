@@ -220,20 +220,17 @@
                     THÔNG TIN ĐĂNG KÝ
                 </h2>
 
-                <!-- Trường: Tên -->
                 <div class="form-group">
                     <label for="Ten" class="form-label">Họ và Tên</label>
                     <input type="text" id="Ten" name="Ten" placeholder="Nguyễn Văn A" required class="form-input">
                 </div>
 
-                <!-- Trường: Năm sinh -->
                 <div class="form-group">
                     <label for="NamSinh" class="form-label">Năm sinh</label>
                     <input type="number" id="NamSinh" name="NamSinh" placeholder="1990" required class="form-input"
                         min="1900" max="2025">
                 </div>
 
-                <!-- Trường: Giới tính (option buttons) -->
                 <div class="form-group">
                     <label class="form-label">Giới tính</label>
                     <div class="option-group" role="radiogroup" aria-label="Giới tính">
@@ -243,7 +240,6 @@
                     <input type="hidden" id="GioiTinh" name="GioiTinh" required>
                 </div>
 
-                <!-- Trường: Bạn có phải là thành viên đã kết nạp DLST (option buttons) -->
                 <div class="form-group">
                     <label class="form-label">Bạn có phải là thành viên đã kết nạp DLST</label>
                     <div class="option-group" role="radiogroup" aria-label="Thành viên">
@@ -255,27 +251,25 @@
                     <input type="hidden" id="ThanhVien" name="ThanhVien" required>
                 </div>
 
-                <!-- Trường: Email -->
                 <div class="form-group">
                     <label for="Email" class="form-label">Email</label>
                     <input type="email" id="Email" name="Email" placeholder="you@gmail.com" required class="form-input"
                         pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$">
                 </div>
 
-                <!-- Trường: Số điện thoại -->
                 <div class="form-group">
                     <label for="SoDienThoai" class="form-label">Số điện thoại (10 chữ số)</label>
                     <input type="tel" id="SoDienThoai" name="SoDienThoai" placeholder="0901234567" required
                         class="form-input" pattern="^\d{10}$">
                 </div>
 
-                <!-- Nút Gửi -->
                 <div>
                     <button type="submit" id="submit-button" class="btn-submit">
                         Gửi Thông Tin
                     </button>
                 </div>
-
+                <a  style=" display: block;text-align: center;">Oops! Thời gian đăng ký chương trình chưa bắt đầu. Xin hãy quay lại vào Thứ Hai, ngày 15/12/2025.</a>
+                <!-- <a  style=" display: block;text-align: center;">Chương trình đã kết thúc thời gian đăng ký. Mong bạn đón chờ các chương trình tiếp theo của chúng tôi!</a> -->
             </form>
         </div>
     </div> <!-- Kết thúc #main-content -->
